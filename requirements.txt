@@ -1,0 +1,19 @@
+# Raspberry Pi 5 + Hailo-8L, for scripts/rtracker_ocr_paddle_v5_queue_v9.py
+# (detector model/rolls.hef + recognizer model/ppocr_rec_fine_tuned_v1.hef, both on the Hailo)
+#
+# 1. System packages (apt) -- HailoRT and OpenCV come from here, not from pip:
+#      sudo apt update
+#      sudo apt install hailo-all python3-opencv python3-numpy v4l-utils
+#    hailo-all provides hailo_platform (HailoRT). Its version must match the Dataflow Compiler version the
+#    two .hef files were built with (HailoRT 4.23.0 so far). Check with:  hailortcli fw-control identify
+#
+# 2. A venv that can see the apt packages (pip install into the system Python is blocked on Pi OS Bookworm):
+#      python3 -m venv --system-site-packages ~/venvs/pi_testing
+#      source ~/venvs/pi_testing/bin/activate
+#      pip install -r requirements.txt
+#
+# Do not pip-install opencv-python or numpy: they would shadow the apt versions that hailo_platform and
+# python3-opencv are built against.
+
+onnxruntime   # imported by the v9 script and ocr_paddle_v5.py at startup, even with both models on the Hailo
+pyserial      # ESP32 bin lights (only used with --esp32-port)
